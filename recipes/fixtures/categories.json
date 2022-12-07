@@ -1,0 +1,51 @@
+[
+    {
+      "model": "recipes.category",
+      "pk": 1,
+      "fields": {
+        "name": "chinese",
+        "active": true
+      }
+    },
+    {
+      "model": "recipes.category",
+      "pk": 2,
+      "fields": {
+        "name": "japanese",
+        "active": true
+      }
+    },
+    {
+        "model": "recipes.category",
+        "pk": 3,
+        "fields": {
+          "name": "irani",
+          "active": true
+        }
+      },
+      {
+        "model": "recipes.category",
+        "pk": 4,
+        "fields": {
+          "name": "fusion",
+          "active": true
+        }
+      },
+      {
+        "model": "recipes.category",
+        "pk": 5,
+        "fields": {
+          "name": "american",
+          "active": true
+        }
+      },
+      {
+        "model": "recipes.category",
+        "pk": 6,
+        "fields": {
+          "name": "italian",
+          "active": true
+        }
+      }
+  ]
+  

@@ -18,6 +18,11 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
         ordering = ('name',)
 
+class Ingredient(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    
+    def __str__(self) -> str:
+        return self.name
 
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
@@ -27,19 +32,13 @@ class Recipe(models.Model):
     steps = models.TextField(default='', blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredientMix')
 
-    
     def __str__(self) -> str:
         return self.name
 
-class Ingredient(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    recipe = models.ManyToManyField(Recipe, related_name='ingredients', through='RecipeIngredientMix')
-    
-    def __str__(self) -> str:
-        return self.name
 class RecipeIngredientMix(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredientset')
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     amount = models.FloatField()
     unit = models.CharField(max_length=50)

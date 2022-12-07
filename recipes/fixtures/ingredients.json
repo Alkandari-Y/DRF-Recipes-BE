@@ -1,0 +1,45 @@
+[
+    {
+      "model": "recipes.ingredient",
+      "pk": 1,
+      "fields": {
+        "name": "tomatoe"
+      }
+    },
+    {
+      "model": "recipes.ingredient",
+      "pk": 2,
+      "fields": {
+        "name": "potatoe"
+      }
+    },
+    {
+        "model": "recipes.ingredient",
+        "pk": 3,
+        "fields": {
+          "name": "apple"
+        }
+      },
+      {
+        "model": "recipes.ingredient",
+        "pk": 4,
+        "fields": {
+          "name": "lemon"
+        }
+      },
+      {
+        "model": "recipes.ingredient",
+        "pk": 5,
+        "fields": {
+          "name": "chicken"
+        }
+      },
+      {
+        "model": "recipes.ingredient",
+        "pk": 6,
+        "fields": {
+          "name": "egg"
+        }
+      }
+  ]
+  

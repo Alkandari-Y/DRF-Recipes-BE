@@ -5,3 +5,7 @@ def get_private_categories():
 
 def get_public_categories():
     return Category.public.all_active()
+
+
+def get_public_categories_by_name(query):
+    return Category.public.search(query=query)

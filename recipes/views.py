@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from recipes.serializers import (
     CategorySerializer, 
@@ -11,10 +12,10 @@ from recipes.mixins import AdminOrReadOnlyMixin
 from recipes.selectors.category import (
     get_public_categories, 
     get_private_categories,
+    get_public_categories_by_name,
 )
 from recipes.selectors.ingredient import get_all_ingredients
 from recipes.selectors.recipes import get_all_recipes
-
 class CategoryViewSet(
     AdminOrReadOnlyMixin,
     ModelViewSet
@@ -27,6 +28,14 @@ class CategoryViewSet(
         else:
             query_set = get_public_categories()
         return query_set
+    
+    @action(detail=False, methods=['get'], name='Search Categories')
+    def search(self, request):
+        params = request.query_params.get("name")
+        qs = get_public_categories_by_name(params)
+        serializer = serializer = self.get_serializer(instance=qs, many=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class IngredientViewSet(

@@ -14,32 +14,44 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
     class Meta:
-        verbose_name_plural = 'categories'
-        ordering = ('name',)
+        verbose_name_plural = "categories"
+        ordering = ("name",)
+
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    
+
     def __str__(self) -> str:
         return self.name
+
 
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipes')
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipes")
     description = models.CharField(max_length=250)
-    steps = models.TextField(default='', blank=True)
+    steps = models.TextField(default="", blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredientMix', related_name='recipes')
+    ingredients = models.ManyToManyField(
+        Ingredient, through="RecipeIngredientMix", related_name="recipes"
+    )
 
     def __str__(self) -> str:
         return self.name
 
+
 class RecipeIngredientMix(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredientset')
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='recipe_mix')
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name="ingredientset"
+    )
+    ingredient = models.ForeignKey(
+        Ingredient, on_delete=models.CASCADE, related_name="recipe_mix"
+    )
     amount = models.FloatField()
     unit = models.CharField(max_length=50)
 
@@ -48,6 +60,5 @@ class RecipeIngredientMix(models.Model):
 
 
 class ModelImage(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='images')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField()
-

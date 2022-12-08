@@ -17,8 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 from recipes import router as recipe_routes
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include(recipe_routes.router.urls)),
-    path('api/', include('accounts.urls')),
+    path("admin/", admin.site.urls),
+    path("api/", include(recipe_routes.router.urls)),
+    path("api/", include("accounts.urls")),
 ]

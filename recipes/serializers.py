@@ -42,13 +42,16 @@ class RecipeIngredientMixSerializer(serializers.ModelSerializer):
         fields = ['id', 'ingredient', 'amount', 'unit']
 
 
-class RecipeSerializer(serializers.ModelSerializer):
-    ingredients_list = RecipeIngredientMixSerializer(source='ingredientset', many=True)
+class RecipeIngredientMixCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecipeIngredientMix
+        fields = ['id', 'ingredient', 'recipe', 'amount', 'unit']
+
+class RecipeBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = [
             "id",
-            "ingredients_list",
             "name",
             "description",
             "steps",
@@ -58,20 +61,14 @@ class RecipeSerializer(serializers.ModelSerializer):
             "owner",
         ]
 
-    def create(self, validated_data):
-        ingredient_mix = validated_data.pop('ingredientset')
-        print(dir(ingredient_mix))
+class RecipeSerializer(RecipeBaseSerializer):
+    ingredients_list = RecipeIngredientMixSerializer(source='ingredientset', many=True)
+    class Meta(RecipeBaseSerializer.Meta):
+        fields = [
+            "ingredients_list",
+            *RecipeBaseSerializer.Meta.fields
+        ]
+    
+    def update(self, instance, validated_data):
         print(validated_data)
-        recipe = Recipe.objects.create(**validated_data)
-        for ing in ingredient_mix:
-            new_mix_obj = RecipeIngredientMix.objects.create(recipe=recipe, **ing)
-            print(new_mix_obj)
-            mix_serializer = RecipeIngredientMixSerializer(data=new_mix_obj)
-            print('pre valid')
-            mix_serializer.is_valid(raise_exception=True) # serializer results in failure
-            print('post valid')
-
-            obj = mix_serializer.save()
-            print(obj)
-            validated_data['ingredientset'] = obj
         return validated_data

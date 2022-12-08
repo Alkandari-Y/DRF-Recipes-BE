@@ -4,9 +4,10 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from recipes.serializers import (
     CategorySerializer, 
-    IngredientSerializer, 
+    IngredientSerializer,
+    RecipeBaseSerializer,
+    RecipeIngredientMixCreateSerializer,
     RecipeSerializer,
-    RecipeIngredientMix
 )
 from recipes.mixins import AdminOrReadOnlyMixin
 from recipes.selectors.category import (
@@ -16,6 +17,8 @@ from recipes.selectors.category import (
 )
 from recipes.selectors.ingredient import get_all_ingredients
 from recipes.selectors.recipes import get_all_recipes
+from recipes.services.recipe_ingredient import create_many_recipe_ingredient_mix
+from recipes.services.recipes import create_recipe
 class CategoryViewSet(
     AdminOrReadOnlyMixin,
     ModelViewSet
@@ -51,14 +54,27 @@ class RecipeViewSet(
     serializer_class = RecipeSerializer
     queryset = get_all_recipes()
 
-    def create(self, serializer):
+    def create(self, *arg, **kwargs):
+        # Split request data and set variables
         data = self.request.data
+        ingredients_mix_list = self.request.data.pop('ingredients_list')
         data['owner']=self.request.user.id
-        # data['ingredientset'] = []
-        # for ingredient in data["ingredients_list"]:
-        #     data['ingredientset'].append(ingredient)
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+
+        # Create Recipe instance
+        recipe = create_recipe(
+            data=data,
+            SerializerClass=RecipeBaseSerializer
+        )
+
+        # Create ingredients.mix
+        create_many_recipe_ingredient_mix(
+            recipe, 
+            ingredients_mix_list, 
+            RecipeIngredientMixCreateSerializer
+        )
+
+        # Return Main serializer
+        serializer = self.get_serializer(instance=recipe)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+

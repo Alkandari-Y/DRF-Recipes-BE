@@ -1,0 +1,54 @@
+[
+  {
+    "model": "recipes.recipe",
+    "pk": 1,
+    "fields": {
+      "name": "Recipe 1",
+      "description": "Eat yummy food",
+      "steps": "Eat yummy food",
+      "category": 3,
+      "owner": 1,
+      "date_created": "2022-12-08T08:44:41.716536Z",
+      "date_modified": "2022-12-08T08:44:41.716536Z"
+    }
+  },
+  {
+    "model": "recipes.recipe",
+    "pk": 2,
+    "fields": {
+      "name": "Recipe 2",
+      "description": "Eat yummy food",
+      "steps": "Eat yummy food",
+      "category": 3,
+      "owner": 1,
+      "date_created": "2022-12-08T08:44:41.716536Z",
+      "date_modified": "2022-12-08T08:44:41.716536Z"
+    }
+  },
+  {
+    "model": "recipes.recipe",
+    "pk": 3,
+    "fields": {
+      "name": "Recipe 3",
+      "description": "Eat yummy food",
+      "steps": "Eat yummy food",
+      "category": 3,
+      "owner": 1,
+      "date_created": "2022-12-08T08:44:41.716536Z",
+      "date_modified": "2022-12-08T08:44:41.716536Z"
+    }
+  },
+  {
+    "model": "recipes.recipe",
+    "pk": 4,
+    "fields": {
+      "name": "Recipe 4",
+      "description": "Eat yummy food",
+      "steps": "Eat yummy food",
+      "category": 3,
+      "owner": 1,
+      "date_created": "2022-12-08T08:44:41.716536Z",
+      "date_modified": "2022-12-08T08:44:41.716536Z"
+    }
+  }
+]

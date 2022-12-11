@@ -42,7 +42,7 @@ class RecipeIngredientMixSerializer(serializers.ModelSerializer):
         fields = ["id", "ingredient", "amount", "unit"]
 
 
-class RecipeIngredientMixCreateSerializer(serializers.ModelSerializer):
+class RecipeIngredientMixCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredientMix
         fields = ["id", "ingredient", "recipe", "amount", "unit"]
@@ -59,15 +59,18 @@ class RecipeBaseSerializer(serializers.ModelSerializer):
             "date_created",
             "date_modified",
             "category",
-            "owner",
+            
         ]
 
+class RecipeCrudSerializer(RecipeBaseSerializer):
+    class Meta(RecipeBaseSerializer.Meta):
+        fields = ["owner", *RecipeBaseSerializer.Meta.fields]
 
 class RecipeSerializer(RecipeBaseSerializer):
-    ingredients_list = RecipeIngredientMixSerializer(source="ingredientset", many=True)
+    ingredient_list = RecipeIngredientMixSerializer(source="ingredient_mix_set", many=True)
 
     class Meta(RecipeBaseSerializer.Meta):
-        fields = ["ingredients_list", *RecipeBaseSerializer.Meta.fields]
+        fields = ["ingredient_list", "owner", *RecipeBaseSerializer.Meta.fields]
 
     def update(self, instance, validated_data):
         print(validated_data)

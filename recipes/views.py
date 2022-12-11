@@ -6,8 +6,10 @@ from recipes.serializers import (
     CategorySerializer,
     IngredientSerializer,
     RecipeBaseSerializer,
-    RecipeIngredientMixCreateSerializer,
+    RecipeCrudSerializer,
     RecipeSerializer,
+    RecipeIngredientMixSerializer,
+    RecipeIngredientMixCrudSerializer,
 )
 from recipes.mixins import AdminOrReadOnlyMixin
 from recipes.selectors.category import (
@@ -17,6 +19,7 @@ from recipes.selectors.category import (
 )
 from recipes.selectors.ingredient import get_all_ingredients
 from recipes.selectors.recipes import get_all_recipes
+from recipes.selectors.recipe_ingredient import get_all_recipe_ingredient_mix
 from recipes.services.recipe_ingredient import create_many_recipe_ingredient_mix
 from recipes.services.recipes import create_recipe
 
@@ -48,21 +51,29 @@ class IngredientViewSet(AdminOrReadOnlyMixin, ModelViewSet):
 
 
 class RecipeViewSet(ModelViewSet):
-    serializer_class = RecipeSerializer
     queryset = get_all_recipes()
+
+    def get_serializer_class(self):
+        if self.action == "update":
+            return RecipeCrudSerializer
+        else:
+            return RecipeSerializer
 
     def create(self, *arg, **kwargs):
         # Split request data and set variables
         data = self.request.data
-        ingredients_mix_list = self.request.data.pop("ingredients_list")
+        
         data["owner"] = self.request.user.id
+        
+        # Check and Add ingredients 
+        ingredients_mix_list = self.request.data.pop("ingredients_list")
 
         # Create Recipe instance
-        recipe = create_recipe(data=data, SerializerClass=RecipeBaseSerializer)
+        recipe = create_recipe(data=data, SerializerClass=RecipeCrudSerializer)
 
         # Create ingredients.mix
         create_many_recipe_ingredient_mix(
-            recipe, ingredients_mix_list, RecipeIngredientMixCreateSerializer
+            recipe, ingredients_mix_list, RecipeIngredientMixCrudSerializer
         )
 
         # Return Main serializer
@@ -71,3 +82,15 @@ class RecipeViewSet(ModelViewSet):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
+    
+
+    
+
+class IngredientViewSet(ModelViewSet):
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return RecipeIngredientMixSerializer
+        else:
+            return RecipeIngredientMixCrudSerializer
+
+    queryset = get_all_recipe_ingredient_mix()

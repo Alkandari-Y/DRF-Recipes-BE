@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from recipes import views
+from recipes.api import views
 
 router = routers.SimpleRouter()
 router.register(r"categories", views.CategoryViewSet, basename="category")

@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
-from recipes.serializers import (
+from recipes.api.serializers import (
     CategorySerializer,
     IngredientSerializer,
     RecipeBaseSerializer,
@@ -11,7 +11,7 @@ from recipes.serializers import (
     RecipeIngredientMixSerializer,
     RecipeIngredientMixCrudSerializer,
 )
-from recipes.mixins import AdminOrReadOnlyMixin
+from recipes.api.mixins import AdminOrReadOnlyMixin
 from recipes.selectors.category import (
     get_public_categories,
     get_private_categories,

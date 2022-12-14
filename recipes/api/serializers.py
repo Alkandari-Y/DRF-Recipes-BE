@@ -6,7 +6,7 @@ from recipes.models import (
     RecipeIngredientMix,
     Recipe,
 )
-from recipes.validators import (
+from recipes.api.validators import (
     unique_ingredient_name,
     unique_category_name,
 )

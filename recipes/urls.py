@@ -1,8 +1,8 @@
 from django.urls import path, include
 
-from recipes.api.router import router
+from recipes import views
 
 urlpatterns = [
-    path("rest/", include(router.urls)),
+    path('', views.get_index, name='index'),
 
 ]

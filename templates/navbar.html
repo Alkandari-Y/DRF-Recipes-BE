@@ -1,0 +1,23 @@
+<nav>
+    <div>
+        <p>logo</p>
+        <ol>
+            <li>Categories</li>
+            <li>Recipes</li>
+        </ol>
+    </div>
+    <div>
+        <p>Dropdown</p>
+        <ol>
+            
+            {% if not request.user.is_authenticated %}
+            <li>Register</li>
+            <li>Login</li>
+            {% else %}
+            {{user.username}}
+            <image src="{{user.profile.image.url}}" alt='profile' >
+            <li>Logout</li>
+            {% endif %}
+        </ol>
+    </div>
+</nav>

@@ -7,6 +7,7 @@ from rest_framework.serializers import (
 )
 
 from accounts.services import create_new_user
+from accounts.models import Profile
 
 User = get_user_model()
 
@@ -38,3 +39,8 @@ class UserCreateSerializer(ModelSerializer):
         validated_data["refresh"] = str(token)
 
         return validated_data
+
+class ProfileSerializer(ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = "__all__"

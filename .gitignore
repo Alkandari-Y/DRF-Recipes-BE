@@ -89,3 +89,4 @@ local_settings.py
 .venv
 venv
 db.sqlite3 
+media/

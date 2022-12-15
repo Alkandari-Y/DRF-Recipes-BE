@@ -15,11 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from django.conf import settings
 
-# from recipes import u as recipe_routes
+from recipes.api.router import router as recipe_router
+from accounts.views import RegisterAPIView, LoginAPIView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include('recipes.urls')),
-    path("api/", include("accounts.urls")),
+    path("", include('recipes.urls')),
+    path("", include("accounts.urls")),
+    path("api/rest/", include(recipe_router.urls)),
+    path("api/rest/register/", RegisterAPIView.as_view(), name="register"),
+    path("api/rest/login/", LoginAPIView.as_view(), name="login"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

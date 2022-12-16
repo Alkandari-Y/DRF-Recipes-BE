@@ -2,11 +2,17 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+# import dotenv
 
 
 def main():
+    # dotenv.read_dotenv()
+
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "foodiez.settings")
+    if str(os.environ.get('DEVELOPMENT_MODE')) == "1":
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "foodiez.settings.dev")
+    else:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "foodiez.settings.prod")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

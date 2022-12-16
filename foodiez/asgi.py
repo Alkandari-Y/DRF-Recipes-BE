@@ -11,6 +11,8 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "foodiez.settings")
-
+if str(os.environ.get('DEVELOPMENT_MODE')) == "1":
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "foodiez.settings.dev")
+else:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "foodiez.settings.prod")
 application = get_asgi_application()

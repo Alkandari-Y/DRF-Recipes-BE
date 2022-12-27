@@ -1,11 +1,11 @@
 from rest_framework.response import Response
+from rest_framework import filters
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from recipes.api.serializers import (
     CategorySerializer,
     IngredientSerializer,
-    RecipeBaseSerializer,
     RecipeCrudSerializer,
     RecipeSerializer,
     RecipeIngredientMixSerializer,
@@ -22,7 +22,7 @@ from recipes.selectors.recipes import get_all_recipes
 from recipes.selectors.recipe_ingredient import get_all_recipe_ingredient_mix
 from recipes.services.recipe_ingredient import create_many_recipe_ingredient_mix
 from recipes.services.recipes import create_recipe
-
+from .pagination import StandardResultsSetPagination
 
 class CategoryViewSet(AdminOrReadOnlyMixin, ModelViewSet):
     serializer_class = CategorySerializer
@@ -52,6 +52,9 @@ class IngredientViewSet(AdminOrReadOnlyMixin, ModelViewSet):
 
 class RecipeViewSet(ModelViewSet):
     queryset = get_all_recipes()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['id', 'name']
+    pagination_class = StandardResultsSetPagination
 
     def get_serializer_class(self):
         if self.action == "update":
@@ -65,7 +68,7 @@ class RecipeViewSet(ModelViewSet):
         
         data["owner"] = self.request.user.id
         
-        # Check and Add ingredients 
+        # Check and save ingredients 
         ingredients_mix_list = self.request.data.pop("ingredients_list")
 
         # Create Recipe instance
